@@ -982,8 +982,32 @@ else
     // Loop until process is exit()ed from shutdown() function,
     // called from ThreadRPCServer thread when a "stop" command is received.
 
+    int totalblocks = GetNumBlocksOfPeers();
+    int nPrevHeight = 0;
+    int64_t prevtime = GetTime();
+
     while (1)
-        MilliSleep(5000);
+    {
+        if (nBestHeight < totalblocks)
+        {
+            if (nBestHeight != nPrevHeight)
+            {
+                nPrevHeight = nBestHeight;
+                prevtime = GetTime();
+                fSyncForceDueStuck = false;
+            }
+            else
+            {
+                int64_t deltatime = GetTime() - prevtime;
+                if (deltatime >= 32)
+                    fSyncForceDueStuck = true;
+            }
+        }
+
+        MilliSleep(4000);
+
+        totalblocks = GetNumBlocksOfPeers();
+    }
 #endif
 
     return true;

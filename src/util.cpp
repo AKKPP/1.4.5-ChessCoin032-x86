@@ -1107,6 +1107,25 @@ void createConf()
 
     ofstream pConf;
     pConf.open(GetConfigFile().generic_string().c_str());
+
+#ifdef BUILD_DAEMON
+    pConf << "rpcuser=user\nrpcpassword="
+            + randomStrGen(15)
+            + "\nrpcport=7324"
+            + "\nport=7323"
+            + "\ndaemon=1 #(0=off, 1=on) Run in the background as a daemon and accept commands"
+            + "\nserver=1 #(0=off, 1=on) Accept command line and JSON-RPC commands"
+            + "\nrpcallowip=127.0.0.1"
+            + "\nlisten=1"
+            + "\naddnode=66.70.191.185:7323"
+            + "\naddnode=51.79.145.189:7323"
+            + "\naddnode=139.99.196.131:7323"
+            + "\naddnode=147.135.210.113:7323"
+            + "\naddnode=54.38.157.243:7323"
+            + "\naddnode=151.80.149.31:7323"
+            + "\naddnode=54.36.163.33:7323"
+            + "\naddnode=51.178.41.236:7323";
+#else
     pConf << "rpcuser=user\nrpcpassword="
             + randomStrGen(15)
             + "\nrpcport=7324"
@@ -1123,6 +1142,7 @@ void createConf()
             + "\naddnode=151.80.149.31:7323"
             + "\naddnode=54.36.163.33:7323"
             + "\naddnode=51.178.41.236:7323";
+#endif
     pConf.close();
 }
 
